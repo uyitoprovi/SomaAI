@@ -1,0 +1,31 @@
+"""Custom exceptions."""
+
+from fastapi import HTTPException, status
+
+
+class SomaAIException(Exception):
+    """Base exception for SomaAI."""
+
+    pass
+
+
+class NotFoundError(SomaAIException):
+    """Resource not found error."""
+
+    pass
+
+
+class ValidationError(SomaAIException):
+    """Validation error."""
+
+    pass
+
+
+def not_found_exception(detail: str = "Resource not found") -> HTTPException:
+    """Create a not found HTTP exception."""
+    return HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=detail)
+
+
+def bad_request_exception(detail: str = "Bad request") -> HTTPException:
+    """Create a bad request HTTP exception."""
+    return HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=detail)
