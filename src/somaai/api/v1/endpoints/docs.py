@@ -1,6 +1,6 @@
 """Document endpoints."""
 
-from fastapi import APIRouter, Query
+from fastapi import APIRouter
 
 from somaai.contracts.docs import DocumentResponse, DocumentViewLinkResponse
 

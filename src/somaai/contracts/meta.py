@@ -1,7 +1,5 @@
 """Metadata endpoint schemas."""
 
-from typing import List, Optional
-
 from pydantic import BaseModel, Field
 
 
@@ -43,7 +41,7 @@ class TopicResponse(BaseModel):
     doc_id: str = Field(..., description="Document ID")
     page_start: int = Field(..., ge=1, description="Page start")
     page_end: int = Field(..., ge=1, description="Page end")
-    path: List[str] = Field(default_factory=list, description="Path to topic")
+    path: list[str] = Field(default_factory=list, description="Path to topic")
     document_count: int = Field(
         0, description="Number of documents covering this topic"
     )

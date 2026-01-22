@@ -1,14 +1,15 @@
 """FastAPI application factory."""
 
+from contextlib import asynccontextmanager
+
 from fastapi import FastAPI
 
 from somaai.api.router import api_router
+from somaai.db.session import close_db
 from somaai.health import health_router
 from somaai.middleware import setup_middleware
-from somaai.settings import settings
 from somaai.providers.llm import get_llm
-from contextlib import asynccontextmanager
-from somaai.db.session import close_db
+from somaai.settings import settings
 
 
 @asynccontextmanager
@@ -22,6 +23,7 @@ async def lifespan(app: FastAPI):
     finally:
         await close_db()
         app.state.llm = None
+
 
 def create_app() -> FastAPI:
     """Create and configure the FastAPI application."""

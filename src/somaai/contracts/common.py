@@ -57,8 +57,8 @@ class PaginatedResponse(BaseModel, Generic[T]):
 
     items: list[T] = Field(..., description="List of items in current page")
     total: int = Field(..., description="Total number of items")
-    page_start: int = Field(..., ge=1, description="First item index in current page (0-indexed)")
-    page_end: int = Field(..., ge=1, description="Last item index in current page (0-indexed)")
+    page_start: int = Field(..., ge=1, description="First item index (1-indexed)")
+    page_end: int = Field(..., ge=1, description="Last item index (1-indexed)")
     has_next: bool = Field(..., description="Whether there are more pages")
     has_prev: bool = Field(..., description="Whether there are previous pages")
 

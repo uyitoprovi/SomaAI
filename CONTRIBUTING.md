@@ -1,6 +1,18 @@
 # Contributing to SomaAI
 
-Thank you for your interest in contributing to SomaAI. This document provides guidelines and information for contributors.
+Thank you for your interest in contributing to SomaAI.
+This document explains how to work on the project safely and efficiently.
+
+
+## Project Philosophy
+
+- Contracts first (Pydantic schemas are the source of truth)
+- Database-backed features
+- Mock-first development (no API keys required)
+- Small, focused pull requests
+- One issue = one PR
+
+
 
 ## Getting Started
 
@@ -45,32 +57,83 @@ uv sync --extra all
 make dev
 ```
 
-## Project Architecture
+### Initial Setup (After Clone)
 
-```
-src/somaai/
-├── api/v1/endpoints/  # REST API endpoints
-├── contracts/         # Pydantic schemas (requests/responses)
-├── cache/             # Caching layer (Redis-backed)
-├── db/                # Database models (SQLAlchemy)
-├── jobs/              # Background tasks (Redis queue)
-├── modules/           # Business logic
-│   ├── chat/          # Chat + citations
-│   ├── docs/          # Document viewing
-│   ├── feedback/      # Response ratings
-│   ├── ingest/        # Document ingestion
-│   ├── meta/          # Grades, subjects, topics
-│   ├── quiz/          # Quiz generation
-│   ├── rag/           # RAG pipeline
-│   ├── teacher/       # Teacher profiles
-│   └── knowledge/     # Embeddings & vectors
-├── providers/         # External service adapters
-└── tests/             # Test suite
+```bash
+# Apply database migrations
+.venv/bin/python -m alembic upgrade head
+
+# Seed grades and subjects
+make seed-meta
 ```
 
-## Development Workflow
+This creates the initial data (P6, S1-S6 grades and subjects like Computer Science, Mathematics, etc.).
 
-### Branch Naming
+### Mock LLM Mode
+
+The project runs in mock mode by default:
+
+```bash
+# Set LLM_BACKEND=mock in .env
+```
+No LLM API keys are required for development.
+
+### MVP Identification (No Auth)
+
+For MVP development, we use headers instead of authentication:
+
+| Role | Header | Usage |
+|------|--------|-------|
+| Student | `X-Actor-Id` | Optional, frontend-generated UUID |
+| Teacher | `X-Teacher-Id` | Required for teacher endpoints |
+
+Example:
+```bash
+curl -X POST http://localhost:8000/api/v1/chat/ask \
+  -H "Content-Type: application/json" \
+  -H "X-Actor-Id: student_abc123" \
+  -d '{"query": "What is a variable?", "grade": "S1", "subject": "computer_science", "user_role": "student"}'
+```
+
+### Issue Workflow (IMPORTANT)
+
+   - All work must start from an issue
+   - One issue = one pull request
+   - Reference the issue number in your PR title
+
+Example:
+
+```bash
+feat(chat): implement ask endpoint (#12)
+```
+
+
+<!-- ### Branch Naming
+
+   - feature/chat-service
+   - feature/quiz-generator
+   - fix/citation-order
+   - docs/readme-update -->
+
+### Development Rules
+
+- You MAY change
+
+   - Business logic in modules/
+   - Endpoint implementations
+   - Tests
+   - Documentation
+
+- You MUST NOT change without approval
+
+   - API contracts (contracts/)
+   - Database models (db/models.py)
+   - Global settings structure
+
+
+### Development Workflow
+
+#### Branch Naming
 
 Use descriptive branch names:
 - `feature/add-quiz-generation` - New features
@@ -82,6 +145,7 @@ Use descriptive branch names:
 1. Create a new branch from `main`
 2. Make your changes
 3. Run linting and tests:
+
    ```bash
    make lint
    make test
@@ -89,9 +153,18 @@ Use descriptive branch names:
 4. Commit your changes with a clear message
 5. Push and open a Pull Request
 
+
+### Adding a New Endpoint
+
+1. Create schema in `contracts/`
+2. Create service in `modules/{module}/service.py`
+3. Create endpoint in `api/v1/endpoints/{module}.py`
+4. Register router in `api/v1/router.py`
+5. Add tests in `tests/test_{module}.py`
+
 ### Code Style
 
-We use [Ruff](https://github.com/astral-sh/ruff) for linting and formatting:
+We use Ruff and MyPy.
 
 ```bash
 # Check linting
@@ -103,8 +176,6 @@ uv run ruff format src/
 ```
 
 ### Testing
-
-Write tests for new functionality:
 
 ```bash
 # Run all tests
@@ -119,41 +190,30 @@ uv run pytest --cov=somaai
 
 ### Database Migrations
 
-We use Alembic for database migrations:
+We use Alembic.
 
 ```bash
-# Generate a new migration
 uv run alembic revision --autogenerate -m "Add new table"
-
-# Apply migrations
 uv run alembic upgrade head
-
-# Rollback
-uv run alembic downgrade -1
 ```
 
-### Available Make Commands
+### Adding a New Feature
 
-| Command | Description |
-|---------|-------------|
-| `make help` | Show all available commands |
-| `make install` | Install dependencies with uv |
-| `make dev` | Run development server |
-| `make lint` | Run linting (ruff + mypy) |
-| `make test` | Run tests |
-| `make docker` | Run with Docker (postgres + redis + qdrant) |
-| `make docker-stop` | Stop Docker containers |
-| `make clean` | Clean build artifacts |
+   - Check existing API contracts
+   - Implement logic in modules/
+   - Wire endpoint in api/v1/endpoints/
+   - Add tests
+   - Open a pull request
 
-## Adding New Features
+Note: Copilot code review may leave automated suggestions on pull requests. These are advisory and do not replace human code review or approval.
 
-### Adding a New Endpoint
+### Educational Content Rules
 
-1. Create schema in `contracts/`
-2. Create service in `modules/{module}/service.py`
-3. Create endpoint in `api/v1/endpoints/{module}.py`
-4. Register router in `api/v1/router.py`
-5. Add tests in `tests/test_{module}.py`
+   - Must align with REB curriculum
+   - Avoid hallucinated facts
+   - Prefer document-backed answers
+   - Be age-appropriate
+
 
 ### Adding a New Module
 
@@ -190,6 +250,20 @@ When reporting bugs, please include:
 - Expected vs actual behavior
 - Environment details (OS, Python version, Docker version)
 - Relevant logs or error messages
+
+### Available Make Commands
+
+| Command | Description |
+|---------|-------------|
+| `make help` | Show all available commands |
+| `make install` | Install dependencies with uv |
+| `make dev` | Run development server |
+| `make lint` | Run linting (ruff + mypy) |
+| `make test` | Run tests |
+| `make docker` | Run with Docker (postgres + redis + qdrant) |
+| `make docker-stop` | Stop Docker containers |
+| `make seed-meta` | Seed grades and subjects |
+| `make clean` | Clean build artifacts |
 
 ## Database Strategy
 

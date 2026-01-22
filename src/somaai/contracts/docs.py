@@ -5,8 +5,7 @@ from typing import Any
 
 from pydantic import BaseModel, Field
 
-from somaai.contracts.common import GradeLevel, Subject, JobStatus
-
+from somaai.contracts.common import GradeLevel, JobStatus, Subject
 
 ### This is not used yet ###
 # class IngestRequest(BaseModel):
@@ -17,7 +16,7 @@ from somaai.contracts.common import GradeLevel, Subject, JobStatus
 
 #     grade: GradeLevel = Field(..., description="Grade level this document covers")
 #     subject: Subject = Field(..., description="Subject this document covers")
-#     title: str | None = Field(None, description="Document title (defaults to filename)")
+#     title: str | None = Field(None, description="Document title")
 #     metadata: dict[str, Any] | None = Field(None, description="Additional metadata")
 
 
@@ -54,11 +53,10 @@ class DocumentResponse(BaseModel):
     metadata: dict[str, Any] | None = Field(None, description="Additional metadata")
 
 
-
 class DocumentViewLinkResponse(BaseModel):
     """Response for GET /api/v1/docs/{doc_id}/view."""
-    url: str = Field(..., description="URL to view the document")
 
+    url: str = Field(..., description="URL to view the document")
 
 
 ### This is not used yet ###

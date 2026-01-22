@@ -21,7 +21,6 @@ from sqlalchemy.sql import func
 from somaai.db.base import Base
 
 
-
 class Grade(Base):
     __tablename__ = "grades"
 
@@ -38,7 +37,6 @@ class Subject(Base):
     name = Column(String(100), nullable=False)  # "Computer Science"
     icon = Column(String(50), nullable=True)
     display_order = Column(Integer, nullable=False, default=0)
-
 
 
 class Document(Base):
@@ -106,7 +104,7 @@ class Message(Base):
 
     id = Column(String(36), primary_key=True)
     session_id = Column(String(36), nullable=True, index=True)
-    actor_id = Column(String(64), nullable=True, index=True) # User Id(cookie or token id for localhost) but fake for tracking(No auth)
+    actor_id = Column(String(64), nullable=True, index=True)  # Actor ID for MVP
     user_role = Column(String(20), nullable=False)
     question = Column(Text, nullable=False)
     answer = Column(Text, nullable=False)
@@ -155,13 +153,15 @@ class MessageCitation(Base):
 class Topic(Base):
     """Curriculum topic for organization and quiz generation.
 
-    Topics are path based 
+    Topics are path based.
     """
 
     __tablename__ = "topics"
 
     id = Column(String(36), primary_key=True)
-    doc_id = Column(String(36), ForeignKey("documents.id", ondelete="SET NULL"), nullable=True)
+    doc_id = Column(
+        String(36), ForeignKey("documents.id", ondelete="SET NULL"), nullable=True
+    )
     title = Column(String(255), nullable=False)
     grade = Column(String(10), nullable=False, index=True)
     subject = Column(String(50), nullable=False, index=True)

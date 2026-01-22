@@ -2,13 +2,12 @@
 
 from logging.config import fileConfig
 
-from sqlalchemy import create_engine, pool
 from alembic import context
+from sqlalchemy import create_engine, pool
 
-from somaai.settings import settings
-from somaai.db.base import Base
 import somaai.db.models  # noqa: F401 - imports all models so metadata is populated
-
+from somaai.db.base import Base
+from somaai.settings import settings
 
 config = context.config
 

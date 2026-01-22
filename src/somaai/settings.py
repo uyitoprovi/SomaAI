@@ -64,4 +64,5 @@ class Settings(BaseSettings):
     openai_api_key: str | None = None
     openai_model: str = ""
 
+
 settings = Settings()

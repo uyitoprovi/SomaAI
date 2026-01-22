@@ -18,16 +18,16 @@ async def ask_question(data: ChatRequest):
 
     Works for both students and teachers:
     - Students: Basic RAG with optional analogy/realworld
-    - Teachers: Defaults from profile, feedback support, analogy/realworld enabled by default
+    - Teachers: Defaults from profile, analogy/realworld enabled
 
     Request body:
     - query: The question to answer
-    - grade: Grade level for context(what grade is the student or teacher teaching)
+    - grade: Grade level for context
     - subject: Subject for context
     - session_id: Optional conversation session
     - user_role: "student" or "teacher"
-    - enable_analogy: Include analogy explanation(optional for students but default for teachers)
-    - enable_realworld: Include real-world context(optional for students but default for teachers)
+    - enable_analogy: Include analogy (optional for students)
+    - enable_realworld: Include real-world context (optional)
 
     Response:
     - message_id: ID for reference/feedback

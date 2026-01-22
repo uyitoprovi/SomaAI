@@ -5,8 +5,7 @@ from enum import Enum
 
 from pydantic import BaseModel, Field, model_validator
 
-from somaai.contracts.common import GradeLevel, Subject, DifficultyLevel
-
+from somaai.contracts.common import DifficultyLevel, GradeLevel, Subject
 
 
 class QuizStatus(str, Enum):
@@ -48,18 +47,16 @@ class QuizGenerateRequest(BaseModel):
     include_answer_key: bool = Field(
         True, description="Include detailed answers with citations"
     )
-    include_citations: bool = Field(
-        True, description="Include citations in answers"
-    )
+    include_citations: bool = Field(True, description="Include citations in answers")
     grade: GradeLevel = Field(..., description="Grade level")
     subject: Subject = Field(..., description="Subject")
 
     @model_validator(mode="after")
     def validate_flags(self):
         if not self.include_answer_key and self.include_citations:
-            raise ValueError("include_citations cannot be true when include_answer_key is false")
+            msg = "include_citations requires include_answer_key=true"
+            raise ValueError(msg)
         return self
-
 
 
 class QuizItemCitation(BaseModel):
@@ -67,7 +64,7 @@ class QuizItemCitation(BaseModel):
 
     doc_id: str = Field(..., description="Source document ID")
     doc_title: str = Field(..., description="Document title")
-    page_end: int = Field(..., ge=1, description="Last item index in current page (0-indexed)")
+    page_end: int = Field(..., ge=1, description="Last page (1-indexed)")
     has_next: bool = Field(..., description="Whether there are more pages")
     excerpt: str = Field(..., description="Relevant excerpt")
 

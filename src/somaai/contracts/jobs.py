@@ -3,9 +3,9 @@
 from datetime import datetime
 from typing import Any
 
-from somaai.contracts.common import JobStatus
-
 from pydantic import BaseModel, Field
+
+from somaai.contracts.common import JobStatus
 
 
 class JobResponse(BaseModel):

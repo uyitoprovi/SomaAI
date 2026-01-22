@@ -2,7 +2,8 @@
 
 from __future__ import annotations
 
-from typing import AsyncIterator, Protocol, runtime_checkable
+from collections.abc import AsyncIterator
+from typing import Protocol, runtime_checkable
 
 from somaai.settings import Settings
 
@@ -75,7 +76,9 @@ def get_llm(settings: Settings) -> LLMClient:
             raise ValueError("OPENAI_API_KEY is required when LLM_BACKEND=openai")
         if not settings.openai_model:
             raise ValueError("OPENAI_MODEL is required when LLM_BACKEND=openai")
-        return OpenAILLMProvider(api_key=settings.openai_api_key, model=settings.openai_model)
+        return OpenAILLMProvider(
+            api_key=settings.openai_api_key, model=settings.openai_model
+        )
 
     if backend == "groq":
         if not settings.groq_api_key:

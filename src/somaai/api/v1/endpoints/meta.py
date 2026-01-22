@@ -2,7 +2,7 @@
 
 from fastapi import APIRouter, Query
 
-from somaai.contracts.meta import GradeResponse, SubjectResponse, TopicResponse
+from somaai.contracts.meta import GradeResponse, SubjectResponse
 
 router = APIRouter(prefix="/meta", tags=["meta"])
 
@@ -29,14 +29,14 @@ async def get_subjects(
     pass
 
 
-@router.get("/topics", response_model=list[TopicResponse])
-async def get_topics(
-    grade: str = Query(..., description="Grade ID (required)"),
-    subject: str = Query(..., description="Subject ID (required)"),
-):
-    """Get topics for a grade and subject.
+# @router.get("/topics", response_model=list[TopicResponse])
+# async def get_topics(
+#     grade: str = Query(..., description="Grade ID (required)"),
+#     subject: str = Query(..., description="Subject ID (required)"),
+# ):
+#     """Get topics for a grade and subject.
 
-    Returns hierarchical topic tree for curriculum navigation.
-    Topics include document count for availability indication.
-    """
-    pass
+#     Returns hierarchical topic tree for curriculum navigation.
+#     Topics include document count for availability indication.
+#     """
+#     pass

@@ -1,63 +1,102 @@
 # SomaAI
 
-An AI-enabled digital platform designed to improve teaching and learning across Rwanda. SomaAI provides students with practice materials and explanatory support based on official national resources, and provides teachers with rapid, practical assistance for preparing quizzes, tests, and clear explanations of complex topics.
+SomaAI is an open-source, AI-powered learning platform designed to improve
+teaching and learning across Rwanda.
+
+It helps **students** understand curriculum topics using official learning
+materials, and helps **teachers** generate quizzes, explanations, and
+teaching support faster and more accurately.
+
+The platform is built around **Retrieval-Augmented Generation (RAG)** using
+official curriculum documents (REB materials).
+
+---
+
+## Project Status
+
+🚧 **Active MVP Development**
+
+- Core architecture and database are complete
+- API contracts are finalized
+- Mock LLM mode is fully supported (no API keys needed)
+- Business logic modules are under active development
+- Expect breaking changes until `v1.0`
+
+Contributions are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md).
+
+---
 
 ## Features
 
-**Student Mode:**
-- Grade + subject selection for contextual learning
-- Ask questions and receive RAG-powered answers
-- Answers include citations with document links and page numbers
-- Optional analogies and real-world context explanations
+### Student Mode
+- Grade + subject–aware question answering
+- Ask questions and receive AI-generated explanations
+- Answers include citations (document + page numbers)
+- Optional analogies and real-world examples
+- Designed for self-study and exam preparation
 
-**Teacher Mode:**
-- All student features plus enhanced defaults
+### Teacher Mode
+- All student features with teacher-optimized defaults
 - Quiz generation from curriculum topics
-- Download quizzes as PDF (questions only or with answer keys)
-- Feedback system for response quality improvement
+- Difficulty and number-of-questions control
+- Download quizzes (questions only or with answer keys)
+- Feedback system to improve answer quality
 
-**Core Capabilities:**
-- RAG-Based Retrieval using official curriculum materials
-- Semantic caching for faster repeated queries
-- Multi-language support (English, Kinyarwanda and French in progress)
+### Core Capabilities
+- RAG-based retrieval from official curriculum documents
+- Semantic caching for repeated questions
+- Multi-language support (English now, Kinyarwanda & French in progress)
+
+---
 
 ## Tech Stack
 
 | Component | Technology |
-|-----------|------------|
-| **Backend** | FastAPI (Python 3.10+) |
-| **Database** | PostgreSQL (NeonDB in production) |
-| **Vector Store** | Qdrant |
-| **Cache/Queue** | Redis |
-| **Package Manager** | [uv](https://github.com/astral-sh/uv) |
+|---------|------------|
+| Backend | FastAPI (Python 3.10+) |
+| Database | PostgreSQL (NeonDB in production) |
+| Vector Store | Qdrant |
+| Cache / Queue | Redis |
+| Package Manager | uv |
+| Migrations | Alembic |
+
+---
 
 ## Quick Start
 
 ### Prerequisites
-
 - Python 3.10+
-- [uv](https://github.com/astral-sh/uv) package manager
-- Docker (recommended for full stack)
+- uv package manager
+- Docker (recommended)
 
 ### Installation
 
 ```bash
-# Clone the repository
 git clone https://github.com/Rwanda-AI-Network/SomaAI.git
 cd SomaAI
 
-# Install dependencies
+cp .env.example .env
 uv sync
 
-# Copy environment variables
-cp .env.example .env
-```
+
+### Mock LLM Mode (No API Keys Required)
+
+- By default, SomaAI runs with a Mock LLM provider.
+
+- Set `LLM_BACKEND=mock` in your `.env` file.
+
+
+- This allows:
+    - Local development
+    - CI execution
+    - Contributor onboarding without paying for LLM tokens.
+
 
 ### Running with Docker (Recommended)
 
 ```bash
 # Start all services (app + postgres + redis + qdrant)
-make docker
+make docker # Recommended
 
 # Or use docker-compose directly
 docker-compose -f docker/docker-compose.yml up --build
@@ -98,37 +137,10 @@ make dev
 
 ## Development
 
+Run `make help` to see all available commands.
 ```bash
-# Install dependencies
-make install
-
-# Install with all optional dependencies
-uv sync --extra all
-
-# Run development server
-make dev
-
-# Run linting
-make lint
-
-# Run tests
-make test
-
-# Clean build artifacts
-make clean
+    make help
 ```
-
-## Available Commands
-
-| Command | Description |
-|---------|-------------|
-| `make help` | Show all available commands |
-| `make install` | Install dependencies with uv |
-| `make dev` | Run development server |
-| `make lint` | Run linting (ruff + mypy) |
-| `make test` | Run tests |
-| `make docker` | Run with Docker (postgres + redis + qdrant) |
-| `make docker-stop` | Stop Docker containers |
 
 ## Project Structure
 
@@ -169,7 +181,7 @@ DATABASE_URL=postgresql+asyncpg://user:pass@ep-xxx.neon.tech/somaai
 
 ## Documentation
 
-- [API Documentation](docs/api.md)
+- [API Documentation](docs/api.md) or (Swagger UI: http://localhost:8000/docs)
 - [Architecture Overview](docs/architecture.md)
 - [Contributing Guide](CONTRIBUTING.md)
 
