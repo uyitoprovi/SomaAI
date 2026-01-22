@@ -25,14 +25,10 @@ class ChatRequest(BaseModel):
     teaching_classes: list[str] | None = Field(
         None, description="Teaching classes for teachers only"
     )
-    preferences: dict[str, str] | None = Field(
-        None, description="User preferences for context"
-    )
-    
-    enable_analogy: bool | None = Field(None, description="Include analogy in response")
-    enable_realworld: bool | None = Field(
-        None, description="Include real-world context"
-    )
+
+class Preferences(BaseModel):
+    enable_analogy: bool = Field(False, description="Include analogy in response")
+    enable_realworld: bool = Field(False, description="Include real-world context")
 
 
 class CitationResponse(BaseModel):
