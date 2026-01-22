@@ -8,8 +8,10 @@ from somaai.contracts.common import GradeLevel, Subject, Sufficiency, UserRole
 
 
 class Preferences(BaseModel):
-    enable_analogy: bool = Field(False, description="Include analogy in response")
-    enable_realworld: bool = Field(False, description="Include real-world context")
+    enable_analogy: bool = Field(default=False, description="Include analogy in response")
+    enable_realworld: bool = Field(
+        default=False, description="Include real-world context"
+    )
 
 
 class ChatRequest(BaseModel):
@@ -31,7 +33,9 @@ class ChatRequest(BaseModel):
         None, description="Teaching classes for teachers only"
     )
     preferences: Preferences = Field(
-        default=Preferences(),
+        default_factory=lambda: Preferences(
+            enable_analogy=False, enable_realworld=False
+        ),
         description="User preferences for context",
     )
 
