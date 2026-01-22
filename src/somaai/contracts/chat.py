@@ -31,7 +31,7 @@ class ChatRequest(BaseModel):
         None, description="Teaching classes for teachers only"
     )
     preferences: Preferences = Field(
-        default_factory=lambda: Preferences(),
+        default=Preferences(),
         description="User preferences for context",
     )
 

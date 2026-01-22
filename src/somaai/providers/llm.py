@@ -12,7 +12,7 @@ from somaai.settings import Settings
 class LLMClient(Protocol):
     async def generate(self, prompt: str) -> str: ...
     async def embed(self, texts: list[str]) -> list[list[float]]: ...
-    def generate_stream(self, prompt: str) -> AsyncIterator[str]: ...
+    async def generate_stream(self, prompt: str) -> AsyncIterator[str]: ...
 
 
 class MockLLMProvider:
@@ -42,6 +42,8 @@ class OpenAILLMProvider:
 
     async def generate_stream(self, prompt: str) -> AsyncIterator[str]:
         raise NotImplementedError("OpenAI streaming not implemented yet")
+        # unreachable but makes this an async generator for type checking
+        yield ""
 
     async def embed(self, texts: list[str]) -> list[list[float]]:
         raise NotImplementedError("OpenAI embeddings not implemented yet")
@@ -59,6 +61,8 @@ class GroqLLMProvider:
 
     async def generate_stream(self, prompt: str) -> AsyncIterator[str]:
         raise NotImplementedError("Groq streaming not implemented yet")
+        # unreachable but makes this an async generator for type checking
+        yield ""
 
     async def embed(self, texts: list[str]) -> list[list[float]]:
         raise NotImplementedError("Groq embeddings not implemented yet")
