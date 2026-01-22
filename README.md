@@ -1,6 +1,6 @@
 
 <p align="center">
-  <img src="./docs/banner.png" alt="SomaAI Banner" width="100%" />
+  <img src="./docs/SomaAI_text.png" alt="SomaAI Banner" width="100%" />
 </p>
 
 # SomaAI
