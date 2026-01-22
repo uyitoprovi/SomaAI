@@ -8,7 +8,9 @@ from somaai.contracts.common import GradeLevel, Subject, Sufficiency, UserRole
 
 
 class Preferences(BaseModel):
-    enable_analogy: bool = Field(default=False, description="Include analogy in response")
+    enable_analogy: bool = Field(
+        default=False, description="Include analogy in response"
+    )
     enable_realworld: bool = Field(
         default=False, description="Include real-world context"
     )
