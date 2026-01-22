@@ -8,6 +8,7 @@ from somaai.middleware import setup_middleware
 from somaai.settings import settings
 from somaai.providers.llm import get_llm
 from contextlib import asynccontextmanager
+from somaai.db.session import close_db
 
 
 @asynccontextmanager
@@ -19,6 +20,7 @@ async def lifespan(app: FastAPI):
     try:
         yield
     finally:
+        await close_db()
         app.state.llm = None
 
 def create_app() -> FastAPI:

@@ -65,7 +65,8 @@ class Chunk(Base):
         index=True,
     )
     content = Column(Text, nullable=False)
-    page_number = Column(Integer, nullable=False)
+    page_start = Column(Integer, nullable=False)
+    page_end = Column(Integer, nullable=False)
     chunk_index = Column(Integer, nullable=False)
     embedding_id = Column(String(100), nullable=True)
     created_at = Column(DateTime, server_default=func.now())
@@ -85,13 +86,14 @@ class Message(Base):
 
     id = Column(String(36), primary_key=True)
     session_id = Column(String(36), nullable=True, index=True)
-    user_id = Column(String(36), nullable=True, index=True)
+    actor_id = Column(String(64), nullable=True, index=True) # User Id(cookie or token id for localhost) but fake for tracking(No auth)
     user_role = Column(String(20), nullable=False)
-    query = Column(Text, nullable=False)
-    response = Column(Text, nullable=False)
-    sufficiency_score = Column(Float, default=1.0)
-    grade = Column(String(10), nullable=False)
-    subject = Column(String(50), nullable=False)
+    question = Column(Text, nullable=False)
+    answer = Column(Text, nullable=False)
+    sufficiency = Column(String(20), nullable=False, default="sufficient")
+    confidence = Column(Float, nullable=True)
+    grade = Column(String(10), nullable=False, index=True)
+    subject = Column(String(50), nullable=False, index=True)
     analogy = Column(Text, nullable=True)
     realworld_context = Column(Text, nullable=True)
     created_at = Column(DateTime, server_default=func.now())
@@ -123,6 +125,7 @@ class MessageCitation(Base):
     )
     relevance_score = Column(Float, default=0.0)
     order = Column(Integer, default=0)
+    snippet = Column(Text, nullable=True)
 
     # Relationships
     message = relationship("Message", back_populates="citations")
@@ -132,21 +135,21 @@ class MessageCitation(Base):
 class Topic(Base):
     """Curriculum topic for organization and quiz generation.
 
-    Topics are hierarchical (can have parent/children).
+    Topics are path based 
     """
 
     __tablename__ = "topics"
 
     id = Column(String(36), primary_key=True)
-    name = Column(String(255), nullable=False)
+    doc_id = Column(String(36), ForeignKey("documents.id", ondelete="SET NULL"), nullable=True)
+    title = Column(String(255), nullable=False)
     grade = Column(String(10), nullable=False, index=True)
     subject = Column(String(50), nullable=False, index=True)
-    parent_topic_id = Column(String(36), ForeignKey("topics.id"), nullable=True)
-    display_order = Column(Integer, default=0)
+    page_start = Column(Integer, nullable=False)
+    page_end = Column(Integer, nullable=False)
+    path = Column(JSON, nullable=False, default=list)
+    # display_order = Column(Integer, default=0)
     created_at = Column(DateTime, server_default=func.now())
-
-    # Self-referential relationship for hierarchy
-    children = relationship("Topic", backref="parent", remote_side=[id])
 
 
 class TeacherProfile(Base):
@@ -158,7 +161,7 @@ class TeacherProfile(Base):
     __tablename__ = "teacher_profiles"
 
     id = Column(String(36), primary_key=True)
-    user_id = Column(String(36), nullable=False, unique=True, index=True)
+    teacher_id = Column(String(64), nullable=False, unique=True, index=True)
     classes_taught = Column(JSON, default=list)
     analogy_enabled = Column(Boolean, default=True)
     realworld_enabled = Column(Boolean, default=True)
@@ -181,7 +184,7 @@ class Feedback(Base):
         nullable=False,
         unique=True,
     )
-    is_useful = Column(Boolean, nullable=False)
+    useful = Column(Boolean, nullable=False)
     text = Column(Text, nullable=True)
     tags = Column(JSON, default=list)
     created_at = Column(DateTime, server_default=func.now())
@@ -199,8 +202,11 @@ class Quiz(Base):
     __tablename__ = "quizzes"
 
     id = Column(String(36), primary_key=True)
-    teacher_id = Column(String(36), nullable=False, index=True)
+    teacher_id = Column(String(64), nullable=False, index=True)
     topic_ids = Column(JSON, nullable=False)
+    grade = Column(String(10), nullable=False, index=True)
+    subject = Column(String(50), nullable=False, index=True)
+    include_citations = Column(Boolean, default=True)
     difficulty = Column(String(20), nullable=False)
     num_questions = Column(Integer, nullable=False)
     include_answer_key = Column(Boolean, default=True)
@@ -234,6 +240,7 @@ class QuizItem(Base):
     answer = Column(Text, nullable=True)
     answer_citations = Column(JSON, default=list)
     order = Column(Integer, nullable=False)
+    options = Column(JSON, nullable=True)
     created_at = Column(DateTime, server_default=func.now())
 
     # Relationships
