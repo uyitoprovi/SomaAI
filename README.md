@@ -1,14 +1,15 @@
+```md
+<p align="center">
+  <img src="https://raw.githubusercontent.com/Rwanda-AI-Network/SomaAI/main/docs/banner.png" width="100%" />
+</p>
+
 # SomaAI
 
-SomaAI is an open-source, AI-powered learning platform designed to improve
-teaching and learning across Rwanda.
+SomaAI is an open-source, AI-powered learning platform designed to improve teaching and learning across Rwanda.
 
-It helps **students** understand curriculum topics using official learning
-materials, and helps **teachers** generate quizzes, explanations, and
-teaching support faster and more accurately.
+It helps **students** understand curriculum topics using official learning materials, and helps **teachers** generate quizzes, explanations, and teaching support faster and more accurately.
 
-The platform is built around **Retrieval-Augmented Generation (RAG)** using
-official curriculum documents (REB materials).
+The platform is built around **Retrieval-Augmented Generation (RAG)** using official curriculum documents (REB materials).
 
 ---
 
@@ -16,9 +17,9 @@ official curriculum documents (REB materials).
 
 🚧 **Active MVP Development**
 
-- Core architecture and database are complete
-- API contracts are finalized
-- Mock LLM mode is fully supported (no API keys needed)
+- Core architecture is in place
+- API contracts are being stabilized
+- Mock LLM mode is supported (no API keys needed)
 - Business logic modules are under active development
 - Expect breaking changes until `v1.0`
 
@@ -29,14 +30,13 @@ Contributions are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md).
 ## Features
 
 ### Student Mode
-- Grade + subject–aware question answering
-- Ask questions and receive AI-generated explanations
-- Answers include citations (document + page numbers)
+- Grade + subject-aware question answering
+- AI-generated explanations with citations (document + page numbers)
 - Optional analogies and real-world examples
 - Designed for self-study and exam preparation
 
 ### Teacher Mode
-- All student features with teacher-optimized defaults
+- Teacher-optimized defaults (analogies + real-world examples enabled by default)
 - Quiz generation from curriculum topics
 - Difficulty and number-of-questions control
 - Download quizzes (questions only or with answer keys)
@@ -44,7 +44,7 @@ Contributions are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ### Core Capabilities
 - RAG-based retrieval from official curriculum documents
-- Semantic caching for repeated questions
+- Caching for repeated questions
 - Multi-language support (English now, Kinyarwanda & French in progress)
 
 ---
@@ -54,7 +54,7 @@ Contributions are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md).
 | Component | Technology |
 |---------|------------|
 | Backend | FastAPI (Python 3.10+) |
-| Database | PostgreSQL (NeonDB in production) |
+| Database | PostgreSQL |
 | Vector Store | Qdrant |
 | Cache / Queue | Redis |
 | Package Manager | uv |
