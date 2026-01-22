@@ -21,6 +21,26 @@ from sqlalchemy.sql import func
 from somaai.db.base import Base
 
 
+
+class Grade(Base):
+    __tablename__ = "grades"
+
+    id = Column(String(10), primary_key=True)  # P6, S1...
+    name = Column(String(50), nullable=False)  # "Primary 6", "Secondary 1"
+    level = Column(String(20), nullable=False)  # primary/secondary
+    display_order = Column(Integer, nullable=False, default=0)
+
+
+class Subject(Base):
+    __tablename__ = "subjects"
+
+    id = Column(String(50), primary_key=True)  # computer_science
+    name = Column(String(100), nullable=False)  # "Computer Science"
+    icon = Column(String(50), nullable=True)
+    display_order = Column(Integer, nullable=False, default=0)
+
+
+
 class Document(Base):
     """Uploaded curriculum document.
 
