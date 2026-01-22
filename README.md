@@ -1,6 +1,6 @@
-```md
+
 <p align="center">
-  <img src="https://raw.githubusercontent.com/Rwanda-AI-Network/SomaAI/main/docs/banner.png" width="100%" />
+  <img src="./docs/banner.png" alt="SomaAI Banner" width="100%" />
 </p>
 
 # SomaAI
