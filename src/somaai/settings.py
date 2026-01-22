@@ -54,10 +54,13 @@ class Settings(BaseSettings):
     # cache_embedding_dim: int = 768
     # cache_namespace: str = "somaai"
 
-    # LLM Provider
-    llm_provider: str = "openai"  # openai | anthropic | huggingface
+    # LLM Backend
+    llm_backend: str = "mock"  # mock | groq | openai | huggingface
+    groq_api_key: str | None = None
+    groq_model: str = "llama3.2"
+    huggingface_api_key: str | None = None
+    huggingface_model: str = ""
     openai_api_key: str | None = None
-    anthropic_api_key: str | None = None
-
+    openai_model: str = ""
 
 settings = Settings()
