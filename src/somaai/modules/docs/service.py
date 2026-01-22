@@ -1,6 +1,6 @@
 """Document service for document management."""
 
-from somaai.contracts.docs import DocumentResponse, DocumentViewResponse
+from somaai.contracts.docs import DocumentResponse, DocumentViewLinkResponse
 
 
 class DocumentService:
@@ -25,7 +25,7 @@ class DocumentService:
         self,
         doc_id: str,
         page_number: int,
-    ) -> DocumentViewResponse | None:
+    ) -> DocumentViewLinkResponse | None:
         """Get a specific page from a document.
 
         Args:
