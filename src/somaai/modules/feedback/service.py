@@ -66,8 +66,6 @@ class FeedbackService:
         )
 
         self.session.add(feedback)
-        await self.session.commit()
-        await self.session.refresh(feedback)
 
         return self._to_response(feedback, request.user_role)
 
