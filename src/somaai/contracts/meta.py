@@ -14,6 +14,9 @@ class GradeResponse(BaseModel):
     display_order: int = Field(..., description="Sort order for UI")
     level: str = Field(..., description="Level category (primary/secondary)")
 
+    class Config:
+        orm_mode = True
+
 
 class SubjectResponse(BaseModel):
     """Subject metadata.
@@ -25,6 +28,9 @@ class SubjectResponse(BaseModel):
     name: str = Field(..., description="Display name")
     display_order: int = Field(..., description="Sort order for UI")
     icon: str | None = Field(None, description="Icon identifier for UI")
+
+    class Config:
+        orm_mode = True
 
 
 class TopicResponse(BaseModel):
@@ -45,3 +51,6 @@ class TopicResponse(BaseModel):
     document_count: int = Field(
         0, description="Number of documents covering this topic"
     )
+
+    class Config:
+        orm_mode = True

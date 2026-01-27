@@ -4,16 +4,22 @@ from logging.config import fileConfig
 
 from alembic import context
 from sqlalchemy import create_engine, pool
+import sys, os
+
+# Add src to path so 'somaai' can be imported
+sys.path.append(os.path.join(os.path.dirname(__file__), "../../..", "src"))
 
 import somaai.db.models  # noqa: F401 - imports all models so metadata is populated
 from somaai.db.base import Base
 from somaai.settings import settings
 
+# Alembic Config object, provides access to .ini file values
 config = context.config
 
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
+# Target metadata for autogenerate
 target_metadata = Base.metadata
 
 
@@ -27,6 +33,7 @@ def get_url() -> str:
 
 
 def run_migrations_offline() -> None:
+    """Run migrations in 'offline' mode."""
     context.configure(
         url=get_url(),
         target_metadata=target_metadata,
@@ -40,6 +47,7 @@ def run_migrations_offline() -> None:
 
 
 def run_migrations_online() -> None:
+    """Run migrations in 'online' mode."""
     connectable = create_engine(get_url(), poolclass=pool.NullPool)
 
     with connectable.connect() as connection:
